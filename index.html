@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>3D Project1</title>
+    <style>
+ html, body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+}
+
+canvas.vignette {
+  box-shadow: inset 0 4px 60px rgba(0,0,0,.75);
+  box-sizing: border-box;
+}
+ </style>
+ <script src="Js/three.js"></script>
+</head>
+<body>
+    <div id="WebGl-container">
+        <div id="app-main"></div>
+        <div id="app-overlay"></div>
+      </div>
+<script>
+var scene = new THREE.Scene();
+
+var fov = 75;
+var aspect = window.innerWidth / window.innerHeight;
+var near = 0.1;
+var far  = 1000;
+var camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
+
+var renderer = new THREE.WebGLRenderer({antialias:1, alpha: 1});
+renderer.setPixelRatio(window.devicePixelRatio ? window.devicePixelRatio : 1);
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.domElement.classList.add('vignette');
+document.getElementById('app-main').appendChild( renderer.domElement );
+
+var cubeSize = 2;
+
+var geometry = new THREE.BoxGeometry(cubeSize, cubeSize, cubeSize);
+var material = new THREE.MeshBasicMaterial({ color: 0x2196f3, wireframe: true });
+var cube     = new THREE.Mesh(geometry, material);
+scene.add(cube);
+
+camera.position.setZ(5);
+
+function onUpdate() {
+  cube.rotation.z += 0.75 * Math.PI / 360;
+	cube.rotation.x += 0.75 * Math.PI / 180;
+}
+
+function render() {
+	requestAnimationFrame(render);
+  onUpdate();
+	renderer.render(scene, camera);
+}
+render();
+    </script>
+</body>
+</html>
